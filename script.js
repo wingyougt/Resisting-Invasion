@@ -1,4 +1,4 @@
-﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿// ================== 首页与弹窗系统 ==================
+﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿// ================== 首页与弹窗系统 ==================
 
 // ---------- 游戏全局状态 ----------
 let gameState = {
@@ -1333,9 +1333,6 @@ function initGame() {
     const CAMPS_CAPACITY = 9;
     function getCampCapacityByLevel(level) {
         return level >= 10 ? 9 : (level >= 5 ? 6 : 3);
-    }
-    function getSameTypeLimitByLevel(level) {
-        return level >= 10 ? 5 : (level >= 5 ? 3 : 2);
     }
     // 营地标记模式（点击营地后，再点击地图设置标记位置）
     let settingCampMarker = false;
@@ -3617,7 +3614,7 @@ let player = { x:400, y:380, width:20, height:20, color:'blue', speed:100, bulle
             for (let ci = 0; ci < campCount; ci++) {
                 if (camps[ci] && camps[ci].unitType === key) campCountOfType++;
             }
-            const maxAllowed = getSameTypeLimitByLevel(playerLevel);
+            const maxAllowed = playerLevel >= 10 ? 3 : (playerLevel >= 5 ? 2 : 1);
             const canPlaceMore = campCountOfType < maxAllowed;
             
             const wrapper = document.createElement('div');
@@ -4291,7 +4288,7 @@ let player = { x:400, y:380, width:20, height:20, color:'blue', speed:100, bulle
                     for (let ci = 0; ci < campCount; ci++) {
                         if (camps[ci] && camps[ci].unitType === selectedAsset._unitType) typeCount++;
                     }
-                    const maxAllowed = getSameTypeLimitByLevel(playerLevel);
+                    const maxAllowed = playerLevel >= 10 ? 3 : (playerLevel >= 5 ? 2 : 1);
                     if (typeCount >= maxAllowed) {
                         addDamageText(mouseX, mouseY-20, `已达上限！最多${maxAllowed}个`, '#FFD700', 1.5, 30);
                     } else if (playerGold >= selectedAsset.cost) {
