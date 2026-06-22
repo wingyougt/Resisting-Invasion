@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>塔防肉鸽 - Resisting Invasion</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- 首页界面 -->
+    <div id="homeScreen" class="screen">
+        <div class="home-content">
+            <h1 class="home-title">Resisting Invasion</h1>
+            <p class="home-subtitle">塔防 · 肉鸽 · 策略</p>
+            <div class="home-btns">
+                <button id="startGameBtn" class="home-btn primary-btn" onclick="showLevelSelect()">开始游戏</button>
+                <button class="home-btn" onclick="showLeaderboard()">排行榜</button>
+                <button class="home-btn" onclick="showSettings()">设置</button>
+            </div>
+            <div class="progress-tools">
+                <button class="tiny-btn" onclick="repairProgress()" title="自动修复进度">🔧 修复进度</button>
+                <button class="tiny-btn" onclick="fixProgressManually()" title="手动设置进度">📝 设置进度</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 关卡选择弹窗 -->
+    <div id="levelSelectModal" class="modal">
+        <div class="modal-content level-modal-content">
+            <div class="modal-header">
+                <h2>选择关卡</h2>
+                <button class="close-btn" onclick="closeModal('levelSelectModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="levelGrid" class="level-grid"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 排行榜弹窗 -->
+    <div id="leaderboardModal" class="modal">
+        <div class="modal-content level-modal-content">
+            <div class="modal-header">
+                <h2>🏆 排行榜</h2>
+                <button class="close-btn" onclick="closeModal('leaderboardModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="leaderboardContent"></div>
+                <button class="clear-btn" onclick="clearLeaderboard()" title="清空所有记录">清空记录</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 设置弹窗 -->
+    <div id="settingsModal" class="modal">
+        <div class="modal-content level-modal-content">
+            <div class="modal-header">
+                <h2>⚙️ 设置</h2>
+                <button class="close-btn" onclick="closeModal('settingsModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="setting-item">
+                    <label>🔊 音效</label>
+                    <label class="switch">
+                        <input type="checkbox" id="soundToggle">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="setting-item">
+                    <label>🎵 音乐</label>
+                    <label class="switch">
+                        <input type="checkbox" id="musicToggle">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- War3风格提示弹窗 -->
+    <div id="war3AlertModal" class="modal" tabindex="-1">
+        <div class="modal-content level-modal-content" style="height:auto;max-width:280px;">
+            <div class="modal-header">
+                <h2 id="war3AlertTitle">提示</h2>
+            </div>
+            <div class="modal-body" style="text-align:center;padding:16px 16px 20px;">
+                <p id="war3AlertMessage" style="color:#000;font-size:0.95em;line-height:1.6;margin:0 0 16px;white-space:pre-line;"></p>
+                <button id="war3AlertBtn" class="war3-btn" onclick="closeModal('war3AlertModal')">确定</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- War3风格输入弹窗 -->
+    <div id="war3PromptModal" class="modal">
+        <div class="modal-content level-modal-content" style="height:auto;max-width:280px;">
+            <div class="modal-header">
+                <h2 id="war3PromptTitle">设置进度</h2>
+            </div>
+            <div class="modal-body" style="text-align:center;padding:16px 16px 20px;">
+                <p id="war3PromptMessage" style="color:#000;font-size:0.9em;line-height:1.5;margin:0 0 12px;white-space:pre-line;"></p>
+                <input id="war3PromptInput" type="number" min="1" max="3" style="width:100px;padding:6px 10px;text-align:center;font-size:1.1em;background:#1a1410;border:2px solid #6a5a3a;border-radius:3px;color:#F0D9A0;outline:none;margin-bottom:14px;">
+                <div style="display:flex;gap:10px;justify-content:center;">
+                    <button class="war3-btn" onclick="confirmWar3Prompt()">确定</button>
+                    <button class="war3-btn war3-btn-cancel" onclick="closeModal('war3PromptModal')">取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 游戏结果弹窗 -->
+    <div id="resultModal" class="modal">
+        <div class="modal-content result-modal-content">
+            <div class="modal-header">
+                <h2 id="resultTitle">— 游戏结果 —</h2>
+                <button class="close-btn" onclick="closeResultModal()">&times;</button>
+            </div>
+            <div class="modal-body" id="resultBody">
+                <div class="result-banner"></div>
+                <div class="result-stats">
+                    <p>关 卡: <span id="resultLevel">1</span></p>
+                    <p>波 次: <span id="resultWave">1</span></p>
+                </div>
+                <div class="result-btns">
+                    <button class="home-btn primary-btn" onclick="closeResultModal();retryLevel();">再来一次</button>
+                    <button class="home-btn" onclick="closeResultModal()">返回首页</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 词条三选一弹窗 -->
+    <div id="perkSelectModal" class="modal">
+        <div class="perk-cards-row" id="perkCardsRow"></div>
+    </div>
+
+    <!-- 加载界面 -->
+    <div id="loadingScreen" class="screen">
+        <div class="loading-content">
+            <h2 id="loadingLevelText">关卡 1</h2>
+            <div class="loading-bar-container">
+                <div id="loadingBar" class="loading-bar"></div>
+            </div>
+            <p id="loadingPercent">0%</p>
+        </div>
+    </div>
+
+    <!-- 游戏主界面 -->
+    <canvas id="gameCanvas" width="800" height="600" style="display:none;"></canvas>
+
+    <!-- HUD -->
+    <div id="gameHUD" class="hud" style="display:none;">
+        <div class="hud-left">
+            <div class="hud-left-content">
+                <button class="hud-pause-btn" onclick="togglePauseMenu()">⏸️</button>
+                <span id="gameGold" class="hud-item">金币: 0</span>
+                <span id="gameGuardians" class="hud-item" style="color:#00FF88;">护卫: 0</span>
+                <span id="gameHP" class="hud-item">敌人: 0/100</span>
+            </div>
+        </div>
+        <div class="hud-right">
+            <div class="hud-right-content">
+                <span id="gameLevel" class="hud-item">关卡: 1</span>
+                <span id="gameWave" class="hud-item">波次: 1/20</span>
+                <span id="gameEnemies" class="hud-item">剩余敌人: 0</span>
+                <span id="gameNextWave" class="hud-item">距离下一波刷新：0秒</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 暂停菜单弹窗 -->
+    <div id="pauseModal" class="modal">
+        <div class="modal-content pause-modal-content">
+            <div class="modal-header">
+                <h2>⏸️ 游戏已暂停</h2>
+                <button class="close-btn" onclick="resumeGame()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <button class="home-btn primary-btn" onclick="resumeGame()">继续游戏</button>
+                <button class="home-btn" onclick="resumeGame(); retryLevel();">重新开始</button>
+                <button class="home-btn" onclick="showPerkList()">已有词条</button>
+                <button class="home-btn" onclick="backToHome()">退出游戏</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 已有词条弹窗 -->
+    <div id="perkListModal" class="modal">
+        <div class="modal-content perk-modal-content">
+            <div class="modal-header">
+                <h2>📜 已有词条</h2>
+                <button class="close-btn" onclick="closePerkList()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="perkListGrid" class="perk-list-grid"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 左侧UI容器：防御塔、陷阱按钮 -->
+    <div id="uiContainer" class="ui-container" style="display:none;">
+        <div class="ui-section">
+            <h3>— 建筑物 —</h3>
+            <div id="towerButtons" class="btn-group"></div>
+        </div>
+        <div class="ui-section">
+            <h3>— 陷阱 —</h3>
+            <div id="trapButtons" class="btn-group"></div>
+        </div>
+    </div>
+
+    <div id="assetPreviewPanel" class="asset-preview-panel" style="display:none;">
+        <div class="upgrade-header">
+            <h3 id="assetPreviewName">建筑名称</h3>
+            <button class="close-btn" onclick="closeAssetPreviewPanel()">&times;</button>
+        </div>
+        <div class="upgrade-body">
+            <div id="assetPreviewStats" class="upgrade-stats"></div>
+        </div>
+    </div>
+
+    <div id="enemyPreviewPanel" class="asset-preview-panel" style="display:none;">
+        <div class="upgrade-header">
+            <h3 id="enemyPreviewName">敌人名称</h3>
+            <button class="close-btn" onclick="closeEnemyPreviewPanel()">&times;</button>
+        </div>
+        <div class="upgrade-body">
+            <div id="enemyPreviewStats" class="upgrade-stats"></div>
+        </div>
+    </div>
+
+    <!-- 角色属性预览面板（右下角，始终显示） -->
+    <div id="playerPreviewPanel" class="player-preview-panel" style="display:block;">
+        <div class="upgrade-header">
+            <h3 id="playerPreviewName">— 属性 —</h3>
+        </div>
+        <div class="upgrade-body">
+            <div id="playerPreviewStats" class="upgrade-stats"></div>
+        </div>
+    </div>
+
+    <!-- 右侧升级面板（点击建筑后显示） -->
+    <div id="upgradePanel" class="upgrade-panel" style="display:none;">
+        <div class="upgrade-header">
+            <h3 id="upgradeBuildingName">建筑名称</h3>
+            <button class="close-btn" onclick="closeUpgradePanel()">&times;</button>
+        </div>
+        <div class="upgrade-body">
+            <p id="upgradeBuildingLevel">等级: 1</p>
+            <div id="upgradeStats" class="upgrade-stats">
+                <!-- 动态填充属性 -->
+            </div>
+            <button id="upgradeBtn" class="upgrade-btn">
+                🔼 升级 (<span id="upgradeCost">0</span> 金币)
+            </button>
+            <button id="sellBtn" class="sell-btn">
+                💰 出售 (+<span id="sellValue">0</span> 金币)
+            </button>
+        </div>
+    </div>
+
+    <!-- 营地浮动操作按钮 -->
+    <button id="campUpgradeBtn" class="camp-float-btn camp-float-top" style="display:none;"><span class="up-arrow">⬆</span><span class="cost-text">(000G)</span></button>
+    <button id="campMarkerBtn" class="camp-float-btn camp-float-bottom" style="display:none;">🚩集合</button>
+
+    <!-- 防御塔浮动操作按钮 -->
+    <button id="towerUpgradeBtn" class="tower-float-btn tower-float-top" style="display:none;"></button>
+    <button id="towerSellBtn" class="tower-float-btn tower-float-bottom" style="display:none;"></button>
+
+    <!-- 左侧兵种容器 -->
+    <div id="unitContainer" class="unit-container" style="display:none;">
+        <div id="unitButtons" class="unit-buttons"></div>
+    </div>
+
+    <!-- 左侧兵种升级面板（点击兵种后显示） -->
+    <div id="unitUpgradePanel" class="unit-upgrade-panel" style="display:none;">
+        <div class="upgrade-header">
+            <h3 id="unitUpgradeName">兵种名称</h3>
+            <button class="close-btn" onclick="closeUnitUpgradePanel()">&times;</button>
+        </div>
+        <div class="upgrade-body">
+            <p id="unitUpgradeLevel">等级: 1</p>
+            <div id="unitUpgradeStats" class="upgrade-stats">
+                <!-- 动态填充属性 -->
+            </div>
+            <button id="unitUpgradeBtn" class="upgrade-btn">
+                🔼 升级 (<span id="unitUpgradeCost">0</span> 金币)
+            </button>
+            <p id="unitUpgradeDesc" style="font-size: 0.75em; color: rgba(255,255,255,0.5); margin-top: 10px; line-height: 1.4;"></p>
+        </div>
+    </div>
+
+    <!-- 加速技能图标 -->
+    <div id="skillIcon" class="skill-icon" style="display:none;">
+        <div class="skill-icon-inner">Z冲</div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

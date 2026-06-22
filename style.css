@@ -1,0 +1,1924 @@
+/* ========== 全局重置 ========== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+    overflow: hidden;
+    background-color: #0a0a1a;
+    min-height: 100vh;
+    color: #fff;
+    user-select: none;
+}
+
+/* ========== 首页（War3风格） ========== */
+#homeScreen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    background: linear-gradient(180deg, #1a1410 0%, #0f0b08 100%);
+}
+
+.home-content {
+    position: relative;
+    text-align: center;
+    z-index: 10;
+    padding: 40px 50px;
+    background: linear-gradient(180deg, #1a1410 0%, #0f0b08 100%);
+    border: 2px solid #8B7355;
+    border-radius: 4px;
+    box-shadow: inset 0 0 20px rgba(0,0,0,0.6), 0 4px 20px rgba(0,0,0,0.8);
+    min-width: 360px;
+}
+
+.home-content::before {
+    content: '';
+    display: block;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #C8A96E, #F0D9A0, #C8A96E, transparent);
+    margin: -40px -50px 20px -50px;
+}
+
+.home-title {
+    font-size: 3.2em;
+    font-weight: 700;
+    color: #F0D9A0;
+    -webkit-text-fill-color: #F0D9A0;
+    background: none;
+    text-shadow: 2px 2px 0 #000;
+    filter: none;
+    margin-bottom: 5px;
+    letter-spacing: 3px;
+}
+
+.home-subtitle {
+    font-size: 1em;
+    color: #000;
+    margin-bottom: 40px;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+}
+
+.home-btns {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.home-btn {
+    width: 200px;
+    padding: 8px 20px;
+    font-size: 0.85em;
+    font-weight: 500;
+    border: 1px solid #6a5a3a;
+    border-radius: 3px;
+    background: linear-gradient(135deg, #3a2a18, #2a1a0a);
+    color: #F0D9A0;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    position: relative;
+    overflow: hidden;
+}
+
+.home-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent);
+    transition: left 0.4s;
+}
+
+.home-btn:hover::before {
+    left: 100%;
+}
+
+.home-btn:hover {
+    border-color: #C8A96E;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.home-btn:active {
+    transform: translateY(0);
+}
+
+.primary-btn {
+    border-color: #8B7355;
+    background: linear-gradient(135deg, #4a3a28, #2a1a0a);
+    box-shadow: 0 0 12px rgba(139, 115, 85, 0.15);
+}
+
+.primary-btn:hover {
+    border-color: #C8A96E !important;
+    box-shadow: 0 4px 16px rgba(200, 169, 110, 0.2) !important;
+}
+
+.home-version {
+    font-size: 0.8em;
+    color: rgba(255, 255, 255, 0.25);
+    margin-top: 16px;
+}
+
+/* 微调按钮（进度工具） */
+.tiny-btn {
+    padding: 6px 12px;
+    font-size: 0.78em;
+    border: 1px solid #6a5a3a;
+    border-radius: 3px;
+    background: linear-gradient(135deg, #3a2a18, #2a1a0a);
+    color: #C8A96E;
+    cursor: pointer;
+    transition: all 0.15s;
+}
+
+.tiny-btn:hover {
+    border-color: #C8A96E;
+    transform: translateY(-1px);
+}
+
+.progress-tools {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    margin-top: 16px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+}
+
+/* ========== 弹窗通用（War3风格） ========== */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.85);
+    z-index: 2000;
+    justify-content: center;
+    align-items: center;
+    animation: fadeIn 0.25s ease;
+}
+
+.modal.show {
+    display: flex;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideUp {
+    from { 
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to { 
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.modal-content {
+    background: linear-gradient(180deg, #1a1410 0%, #0f0b08 100%);
+    border: 2px solid #8B7355;
+    border-radius: 4px;
+    max-width: 280px;
+    width: 85%;
+    max-height: 80vh;
+    overflow-y: auto;
+    animation: slideUp 0.25s ease;
+    box-shadow: inset 0 0 20px rgba(0,0,0,0.6), 0 4px 20px rgba(0,0,0,0.8);
+}
+
+.modal-content::before {
+    content: '';
+    display: block;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #C8A96E, #F0D9A0, #C8A96E, transparent);
+}
+
+/* 关卡选择弹窗更小 */
+.level-modal-content {
+    max-width: 280px;
+    height: auto;
+    min-height: 100px;
+    display: flex;
+    flex-direction: column;
+}
+.level-modal-content .modal-body {
+    flex: 1;
+    padding: 8px 12px 12px;
+    overflow-y: auto;
+}
+.level-modal-content .modal-header {
+    padding: 8px 12px;
+    flex-shrink: 0;
+    justify-content: center;
+    position: relative;
+}
+.level-modal-content .modal-header .close-btn {
+    position: absolute;
+    right: 8px;
+    top: 8px;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+.modal-header h2 {
+    font-size: 1.1em;
+    font-weight: 500;
+    color: #000;
+    background: none;
+}
+
+.close-btn {
+    font-size: 2em;
+    color: #000;
+    cursor: pointer;
+    transition: all 0.2s;
+    line-height: 1;
+    background: none;
+    border: none;
+    padding: 0;
+}
+
+.close-btn:hover {
+    color: #000;
+    transform: rotate(90deg);
+}
+
+.modal-body {
+    padding: 16px 20px 20px;
+}
+
+/* ========== 暂停弹窗居中 ========== */
+.pause-modal-content .modal-header {
+    justify-content: center;
+    position: relative;
+}
+.pause-modal-content .modal-header .close-btn {
+    position: absolute;
+    right: 12px;
+    top: 12px;
+}
+.pause-modal-content .modal-body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+/* ========== 开关样式 ========== */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 26px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 26px;
+    transition: all 0.3s;
+}
+
+.slider::before {
+    content: '';
+    position: absolute;
+    height: 20px;
+    width: 20px;
+    left: 3px;
+    bottom: 3px;
+    background: #fff;
+    border-radius: 50%;
+    transition: all 0.3s;
+}
+
+.switch input:checked + .slider {
+    background: linear-gradient(135deg, #ffd700, #ff8c00);
+}
+
+.switch input:checked + .slider::before {
+    transform: translateX(24px);
+}
+
+.setting-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+
+.setting-item label {
+    font-size: 0.9em;
+    color: #000;
+}
+
+.setting-item:last-child {
+    border-bottom: none;
+}
+
+/* ========== 关卡选择网格（War3风格） ========== */
+.level-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+    padding: 2px;
+}
+
+.level-btn {
+    width: 70px;
+    height: 70px;
+    border: 2px solid #6a5a3a;
+    border-radius: 3px;
+    color: #F0D9A0;
+    font-size: 0.85em;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    position: relative;
+}
+
+.level-btn .level-num {
+    font-size: 1.3em;
+    font-weight: 700;
+    text-shadow: 1px 1px 0 #000;
+}
+
+.level-btn .level-stars {
+    font-size: 0.6em;
+    color: #F0D9A0;
+}
+
+.level-btn:hover {
+    border-color: #C8A96E;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+}
+
+.level-btn:active {
+    transform: translateY(0);
+}
+
+.level-btn.completed {
+    border-color: #4a6a4a;
+    background: linear-gradient(135deg, #2a3a2a, #1a2a1a);
+}
+
+.level-btn.completed::after {
+    content: '✓';
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    width: 18px;
+    height: 18px;
+    background: #4a6a4a;
+    border-radius: 2px;
+    font-size: 0.65em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #8a8a6a;
+    border: 1px solid #6a8a6a;
+}
+
+.level-btn.locked {
+    opacity: 0.35;
+    cursor: not-allowed;
+}
+
+.level-btn.locked:hover {
+    transform: none;
+    box-shadow: none;
+    border-color: #6a5a3a;
+    background: linear-gradient(135deg, #3a2a18, #2a1a0a);
+}
+
+.level-btn.current {
+    border-color: #C8A96E;
+    box-shadow: 0 0 12px rgba(200, 169, 110, 0.2);
+}
+
+/* ========== 排行榜 ========== */
+#leaderboardContent {
+    margin-bottom: 15px;
+}
+
+.empty-leaderboard {
+    text-align: center;
+    padding: 40px 20px;
+    color: #000;
+    font-size: 1em;
+}
+
+.leaderboard-item {
+    display: flex;
+    align-items: center;
+    padding: 10px 12px;
+    border-radius: 3px;
+    margin-bottom: 6px;
+    background: linear-gradient(135deg, #3a2a18, #2a1a0a);
+    border: 1px solid #6a5a3a;
+    transition: all 0.15s;
+}
+
+.leaderboard-item:hover {
+    border-color: #8B7355;
+}
+
+.leaderboard-rank {
+    font-size: 1.1em;
+    font-weight: 700;
+    width: 32px;
+    color: #000;
+    text-align: center;
+}
+
+.leaderboard-info {
+    flex: 1;
+    margin-left: 10px;
+}
+
+.leaderboard-level {
+    font-weight: 500;
+    font-size: 0.9em;
+    color: #000;
+}
+
+.leaderboard-wave {
+    font-size: 0.8em;
+    color: #000;
+}
+
+.leaderboard-time {
+    font-size: 0.75em;
+    color: #000;
+}
+
+.clear-btn {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #6a3a3a;
+    border-radius: 3px;
+    background: linear-gradient(135deg, #3a1a1a, #2a0a0a);
+    color: #C86A6A;
+    font-size: 0.85em;
+    cursor: pointer;
+    transition: all 0.15s;
+}
+
+.clear-btn:hover {
+    background: linear-gradient(135deg, #4a2a2a, #3a1a1a);
+    border-color: #8a4a4a;
+    color: #E08A8A;
+}
+
+/* ========== 加载页面 ========== */
+.screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+#loadingScreen {
+    background: linear-gradient(180deg, #1a1410 0%, #0f0b08 100%);
+    display: none;
+}
+
+#loadingScreen.show {
+    display: flex;
+}
+
+.loading-content {
+    text-align: center;
+    padding: 30px 50px;
+    border: 2px solid #8B7355;
+    border-radius: 4px;
+    box-shadow: inset 0 0 20px rgba(0,0,0,0.6), 0 4px 20px rgba(0,0,0,0.8);
+}
+
+.loading-content::before {
+    content: '';
+    display: block;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #C8A96E, #F0D9A0, #C8A96E, transparent);
+    margin: -30px -50px 20px -50px;
+}
+
+.loading-content h2 {
+    font-size: 1.6em;
+    font-weight: 500;
+    color: #F0D9A0;
+    margin-bottom: 24px;
+    background: none;
+    -webkit-text-fill-color: #F0D9A0;
+    text-shadow: 1px 1px 0 #000;
+}
+
+.loading-bar-container {
+    width: 100%;
+    min-width: 280px;
+    height: 12px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 2px;
+    overflow: hidden;
+    border: 1px solid #6a5a3a;
+    position: relative;
+}
+
+.loading-bar {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #8B7355, #C8A96E);
+    border-radius: 2px;
+    transition: width 0.1s ease;
+    position: relative;
+}
+
+#loadingPercent {
+    font-size: 1em;
+    margin-top: 12px;
+    color: #000;
+    text-align: center;
+}
+
+/* ========== 游戏结果 ========== */
+.result-modal-content {
+    max-width: 280px;
+}
+
+/* ========== War3风格按钮（用于提示弹窗） ========== */
+.war3-btn {
+    padding: 6px 24px;
+    border: 2px solid #6a5a3a;
+    border-radius: 3px;
+    color: #F0D9A0;
+    font-size: 0.9em;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: inherit;
+}
+.war3-btn:hover {
+    border-color: #C8A96E;
+    color: #FFF0C0;
+}
+.war3-btn-cancel {
+    border-color: #5a3a3a;
+}
+.war3-btn-cancel:hover {
+    border-color: #AA5555;
+}
+
+.result-modal-content .modal-header {
+    justify-content: center;
+}
+
+#resultTitle {
+    text-align: center;
+}
+
+.result-modal-content .close-btn {
+    display: none;
+}
+
+.result-banner {
+    height: 3px;
+    margin-bottom: 16px;
+}
+
+.result-banner-victory {
+    background: linear-gradient(90deg, transparent, #8B7355, #F0D9A0, #8B7355, transparent);
+}
+
+.result-banner-defeat {
+    background: linear-gradient(90deg, transparent, #6a3a3a, #C86A6A, #6a3a3a, transparent);
+}
+
+.result-stats {
+    text-align: center;
+    padding: 0;
+}
+
+.result-stats p {
+    font-size: 0.9em;
+    margin: 6px 0;
+    color: #000;
+    letter-spacing: 2px;
+}
+
+.result-stats span {
+    font-weight: 600;
+    font-size: 1.1em;
+    color: #000;
+}
+
+.result-tip {
+    font-size: 0.85em !important;
+    color: rgba(180, 40, 40, 0.95) !important;
+    margin-top: 16px !important;
+    text-align: center;
+}
+
+.result-btns {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+/* ========== 游戏HUD ========== */
+#gameHUD {
+    position: fixed;
+    top: 4px;
+    left: 195px;
+    right: 195px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    z-index: 100;
+    pointer-events: none;
+}
+#gameHUD .hud-left,
+#gameHUD .hud-right {
+    pointer-events: auto;
+}
+
+.hud-left {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+}
+
+.hud-left-content {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    flex-wrap: wrap;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.hud-left-content.hidden {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-4px);
+}
+
+.hud-item {
+    font-size: 0.95em;
+    color: #F0D9A0;
+    font-weight: 600;
+    text-shadow: 1px 1px 0 #000, 0 0 8px rgba(0,0,0,0.6);
+    letter-spacing: 0.5px;
+}
+
+#gameGold {
+    color: #FFD700;
+    font-weight: 700;
+    text-shadow: 1px 1px 0 #000, 0 0 10px rgba(255, 215, 0, 0.25);
+    position: relative;
+}
+
+.hud-pause-btn {
+    background: none;
+    border: none;
+    color: #F0D9A0;
+    font-size: 1.0em;
+    cursor: pointer;
+    padding: 0 2px;
+    margin-left: -4px;
+    margin-top: 2px;
+    line-height: 1;
+    text-shadow: 1px 1px 0 #000, 0 0 8px rgba(0,0,0,0.6);
+    transition: color 0.15s ease, transform 0.15s ease;
+}
+.hud-pause-btn:hover {
+    color: #FFD700;
+    transform: scale(1.15);
+}
+
+#gameGuardians {
+    color: #66EE88 !important;
+    font-weight: 600;
+    text-shadow: 1px 1px 0 #000, 0 0 8px rgba(102, 238, 136, 0.2);
+}
+
+#gameHP {
+    color: #FF8A8A;
+    font-weight: 600;
+    text-shadow: 1px 1px 0 #000, 0 0 8px rgba(255, 138, 138, 0.2);
+}
+
+#gameLevel { color: #7EC8E3; }
+#gameWave { color: #F9E076; }
+#gameEnemies { color: #FF8A8A; }
+#gameNextWave { color: #A8E6CF; }
+
+.hud-gold-gain {
+    position: absolute;
+    top: 0;
+    left: 100%;
+    margin-left: 4px;
+    color: #FFD700;
+    font-weight: 700;
+    opacity: 0;
+    transform: translateY(0);
+    transition: opacity 0.15s ease, transform 0.15s ease;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+    pointer-events: none;
+    white-space: nowrap;
+}
+
+.hud-gold-gain.show {
+    opacity: 1;
+    transform: translateY(-2px);
+}
+
+.hud-right {
+    display: flex;
+    align-items: flex-start;
+    gap: 4px;
+}
+
+.hud-right-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.hud-right-content.hidden {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-4px);
+}
+
+.hud-toggle-btn {
+    background: none;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 12px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    line-height: 1;
+    pointer-events: auto;
+}
+.hud-toggle-btn:hover {
+    border-color: rgba(255, 255, 255, 0.5);
+    color: #fff;
+}
+.hud-toggle-btn.collapsed {
+    transform: rotate(180deg);
+}
+
+.pause-modal-content {
+    max-width: 420px;
+    min-width: 280px;
+}
+
+.perk-list-grid {
+    display: grid;
+    gap: 12px;
+    max-height: 320px;
+    overflow-y: auto;
+}
+
+.perk-list-item {
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 10px;
+    padding: 12px;
+    background: rgba(255,255,255,0.05);
+}
+
+.perk-list-item h4 {
+    margin: 0;
+    font-size: 0.95em;
+    color: #000;
+}
+
+.perk-list-item p {
+    display: none;
+}
+
+.hud-btn {
+    padding: 6px 14px;
+    border: 1px solid rgba(255, 100, 100, 0.4);
+    border-radius: 8px;
+    background: rgba(255, 100, 100, 0.1);
+    color: rgba(255, 150, 150, 0.9);
+    cursor: pointer;
+    font-size: 0.8em;
+    transition: all 0.3s;
+}
+
+.hud-btn:hover {
+    background: rgba(255, 100, 100, 0.2);
+    border-color: rgba(255, 100, 100, 0.6);
+}
+
+/* ========== 画布 ========== */
+canvas {
+    display: block;
+    background-color: #5EA05E;
+    border: none;
+    position: absolute;
+    top: 0;
+    left: 185px;
+    width: 1160px;
+    height: 720px;
+    max-width: calc(100% - 370px);
+    max-height: calc(100vh - 0px);
+}
+
+/* ========== 左侧面板（军营）= 右侧面板（防御塔/陷阱）统一尺寸 ========== */
+#unitContainer, #uiContainer {
+    position: absolute;
+    top: 10px;
+    background: linear-gradient(180deg, #1a1410 0%, #0f0b08 100%);
+    border: 2px solid #8B7355;
+    border-radius: 4px;
+    padding: 6px;
+    width: 165px;
+    max-height: calc(100vh - 60px);
+    overflow-y: auto;
+    z-index: 100;
+    box-shadow: inset 0 0 20px rgba(0,0,0,0.6), 0 4px 20px rgba(0,0,0,0.8);
+}
+
+#unitContainer {
+    left: 10px;
+}
+
+#uiContainer {
+    right: 10px;
+    left: auto;
+}
+
+#unitContainer::before, #uiContainer::before {
+    content: '';
+    display: block;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #C8A96E, #F0D9A0, #C8A96E, transparent);
+    margin: -6px -6px 4px -6px;
+    border-radius: 0;
+}
+
+/* ========== 升级面板 ========== */
+.upgrade-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.upgrade-header h3 {
+    font-size: 0.85em;
+    color: #ffd700;
+}
+
+/* 敌人属性面板、左侧面板标题居中 */
+#enemyPreviewPanel .upgrade-header h3,
+.player-preview-panel .upgrade-header h3 {
+    text-align: center;
+    width: 100%;
+}
+
+.player-preview-panel .upgrade-header {
+    justify-content: center;
+}
+
+#enemyPreviewPanel .upgrade-header .close-btn {
+    display: none;
+}
+
+.upgrade-body p {
+    font-size: 0.78em;
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: 6px;
+}
+
+.upgrade-stats {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 6px;
+    padding: 7px;
+}
+
+.stat-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.72em;
+    margin-bottom: 3px;
+}
+
+.stat-name { color: rgba(255, 255, 255, 0.6); }
+.stat-value { color: #fff; font-weight: 600; }
+.stat-upgrade { color: #00FF88; margin-left: 4px; }
+
+.upgrade-btn, .sell-btn {
+    width: 100%;
+    padding: 6px 8px;
+    border-radius: 8px;
+    border: none;
+    font-size: 0.82em;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-bottom: 8px;
+    white-space: nowrap;
+}
+
+.upgrade-btn {
+    background: linear-gradient(135deg, #ffd700, #ff8c00);
+    color: #000;
+}
+
+.upgrade-btn:hover:not(:disabled) {
+    transform: scale(1.02);
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
+}
+
+.upgrade-btn:disabled {
+    background: #444;
+    color: #888;
+    cursor: not-allowed;
+}
+
+.sell-btn {
+    background: rgba(255, 100, 100, 0.1);
+    border: 1px solid rgba(255, 100, 100, 0.3);
+    color: #ff6464;
+}
+
+.sell-btn:hover {
+    background: rgba(255, 100, 100, 0.2);
+    border-color: rgba(255, 100, 100, 0.5);
+}
+
+.ui-section {
+    margin-bottom: 6px;
+}
+
+/* 新增：可购买与不可购买样式 */
+.can-buy {
+    border-color: rgba(255, 215, 0, 0.5) !important;
+    background: rgba(255, 215, 0, 0.12) !important;
+    color: #FFD700 !important;
+}
+
+.cant-buy {
+    border-color: rgba(255, 255, 255, 0.05) !important;
+    background: rgba(255, 255, 255, 0.02) !important;
+    color: rgba(255, 255, 255, 0.3) !important;
+    filter: grayscale(1);
+}
+
+/* ========== 兵种升级面板 (左侧) ========== */
+.asset-preview-panel {
+    position: fixed;
+    top: 10px;
+    left: 0;
+    background: linear-gradient(180deg, #1a1410 0%, #0f0b08 100%);
+    border: 2px solid #8B7355;
+    border-radius: 4px;
+    padding: 8px;
+    width: 150px;
+    z-index: 120;
+    box-shadow: inset 0 0 20px rgba(0,0,0,0.6), 0 4px 20px rgba(0,0,0,0.8);
+}
+
+/* 敌人属性预览弹窗 - War3风格 */
+#enemyPreviewPanel {
+    top: auto;
+    bottom: auto;
+    left: 10px;
+    width: 165px;
+    background: linear-gradient(180deg, #1a1410 0%, #0f0b08 100%);
+    border: 2px solid #8B7355;
+    border-radius: 4px;
+    padding: 6px;
+    z-index: 120;
+    box-shadow: inset 0 0 20px rgba(0,0,0,0.6), 0 4px 20px rgba(0,0,0,0.8);
+}
+
+#enemyPreviewPanel::before {
+    content: '';
+    display: block;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #C8A96E, #F0D9A0, #C8A96E, transparent);
+    margin: -8px -8px 4px -8px;
+}
+
+/* 角色属性预览弹窗（右侧，JS动态定位） - 与敌人面板尺寸一致 */
+.player-preview-panel {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    background: linear-gradient(180deg, #1a1410 0%, #0f0b08 100%);
+    border: 2px solid #8B7355;
+    border-radius: 4px;
+    padding: 6px;
+    width: 165px;
+    min-width: auto;
+    z-index: 120;
+    box-shadow: inset 0 0 20px rgba(0,0,0,0.6), 0 4px 20px rgba(0,0,0,0.8);
+}
+
+/* 营地浮动操作按钮 - 出现在营地上方/下方 */
+.camp-float-btn {
+    position: fixed;
+    z-index: 150;
+    padding: 2px 0px;
+    font-size: 0.26em;
+    border-radius: 2px;
+    border: 1px solid #6a5a3a;
+    background: linear-gradient(135deg, #3a2a18, #2a1a0a);
+    color: #F0D9A0;
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+    font-weight: 450;
+    pointer-events: auto;
+    line-height: 1.2;
+    letter-spacing: -0.5px;
+    text-align: center;
+}
+#campUpgradeBtn {
+    min-width: 2.0em;
+    text-align: center;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    line-height: 1.0;
+    padding: 1px 2px;
+}
+#campUpgradeBtn .up-arrow {
+    display: block;
+    line-height: 1;
+}
+#campUpgradeBtn {
+    color: #FFD700;
+}
+#campUpgradeBtn .cost-text {
+    display: block;
+    line-height: 1;
+    color: #FFD700;
+}
+#campMarkerBtn {
+    text-align: center;
+    color: #FF6464;
+}
+
+/* 防御塔浮动操作按钮 */
+.tower-float-btn {
+    position: fixed;
+    z-index: 150;
+    padding: 1px 1px;
+    font-size: 0.30em;
+    border-radius: 2px;
+    border: 1px solid #6a5a3a;
+    background: linear-gradient(135deg, #3a2a18, #2a1a0a);
+    color: #F0D9A0;
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+    font-weight: 500;
+    pointer-events: auto;
+    line-height: 1.2;
+    text-align: center;
+    min-width: 1.6em;
+}
+.tower-float-btn:hover {
+    background: linear-gradient(135deg, #5a4a38, #3a2a18);
+    border-color: #C8A96E;
+}
+.tower-float-btn:disabled {
+    opacity: 0.4;
+    cursor: default;
+}
+#towerUpgradeBtn:disabled {
+    color: #FFD700;
+    border-color: #6a5a3a;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    line-height: 1.0;
+    padding: 1px 1px;
+}
+#towerUpgradeBtn .tower-up-icon {
+    display: block;
+    color: #44DD44;
+    font-size: 0.7em;
+    line-height: 1;
+}
+#towerUpgradeBtn .tower-cost-text {
+    display: block;
+    line-height: 1;
+}
+#towerSellBtn {
+    color: #FF6464;
+    border-color: #6a3a2a;
+}
+.camp-float-btn:hover {
+    background: linear-gradient(135deg, #5a4a38, #3a2a18);
+    border-color: #C8A96E;
+}
+.camp-float-btn:disabled {
+    opacity: 0.4;
+    cursor: default;
+}
+.up-arrow {
+    color: #44DD44;
+    font-size: 0.55em;
+}
+
+.player-preview-panel::before {
+    content: '';
+    display: block;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #C8A96E, #F0D9A0, #C8A96E, transparent);
+    margin: -8px -8px 4px -8px;
+}
+
+.player-preview-panel .upgrade-header h3 {
+    color: #F0D9A0;
+    font-size: 0.78em;
+    font-weight: 400;
+    letter-spacing: 2px;
+    margin: 2px 0 6px 0;
+    padding: 4px 0;
+    text-align: center;
+    text-transform: uppercase;
+    border-bottom: 1px solid rgba(200, 169, 110, 0.25);
+    text-shadow: 0 0 8px rgba(200, 169, 110, 0.3);
+}
+
+.player-preview-panel .upgrade-body {
+    padding: 4px 0;
+}
+
+.player-preview-panel .upgrade-stats {
+    padding: 0;
+    background: none;
+    border-radius: 0;
+}
+
+.player-preview-panel .stat-name {
+    color: #8a7a6a;
+    font-size: 0.7em;
+}
+
+.player-preview-panel .stat-value {
+    color: #E0D5C0;
+    font-size: 0.7em;
+    font-weight: 500;
+}
+
+.player-preview-panel .stat-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 3px;
+    padding: 2px 0;
+    font-size: 0.72em;
+}
+
+@keyframes slideInLeft {
+    from { transform: translateX(-20px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+#unitUpgradeBtn {
+    background: linear-gradient(135deg, #ffd700, #ff8c00);
+    color: #000;
+    padding: 5px 8px;
+    font-size: 0.76em;
+    white-space: nowrap;
+}
+
+#unitUpgradeBtn:hover:not(:disabled) {
+    transform: scale(1.02);
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
+}
+
+#unitUpgradeBtn:disabled {
+    background: #444;
+    color: #888;
+    cursor: not-allowed;
+}
+
+.unit-item {
+    margin-bottom: 12px;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* ========== 词条三选一弹窗（3D立体悬浮） ========== */
+#perkSelectModal {
+    z-index: 3000;
+    display: none;
+    position: fixed;
+    inset: 0;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 18vh;
+    background: none;
+    pointer-events: none;
+}
+#perkSelectModal.show {
+    display: flex;
+}
+
+.perk-cards-row {
+    display: flex;
+    flex-direction: row;
+    gap: 200px;
+    justify-content: center;
+    align-items: stretch;
+    perspective: 1200px;
+    pointer-events: auto;
+    margin-top: -30px;
+}
+
+/* 3D立体独立词条卡片 */
+.perk-card-3d {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 110px;
+    min-height: 190px;
+    padding: 20px 12px;
+    background: rgba(26, 18, 10, 0.6);
+    border: 2px solid rgba(106, 90, 58, 0.7);
+    border-radius: 14px;
+    cursor: pointer;
+    position: relative;
+    text-align: center;
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+    transform: perspective(1200px) rotateY(0deg) translateZ(0);
+    transition: all 0.25s ease;
+    box-shadow:
+        0 8px 32px rgba(0,0,0,0.5),
+        inset 0 1px 0 rgba(200, 169, 110, 0.1);
+}
+
+.perk-card-3d .card-desc {
+    font-size: 0.65em;
+    color: #FFF;
+    line-height: 1.3;
+    margin-top: 2px;
+    max-width: 100%;
+}
+
+.perk-card-3d .card-level {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    font-size: 0.7em;
+    color: #FFD700;
+    background: rgba(0,0,0,0.5);
+    padding: 1px 7px;
+    border-radius: 8px;
+    border: 1px solid rgba(255,215,0,0.3);
+    font-weight: 600;
+}
+/* 左右卡片微旋，更有立体感 */
+.perk-card-3d:nth-child(1) {
+    transform: perspective(1200px) rotateY(6deg) translateZ(0);
+}
+.perk-card-3d:nth-child(3) {
+    transform: perspective(1200px) rotateY(-6deg) translateZ(0);
+}
+
+.perk-card-3d:hover {
+    transform: perspective(1200px) rotateY(0deg) translateY(-8px) translateZ(20px);
+    border-color: rgba(200, 169, 110, 0.8);
+    box-shadow:
+        0 16px 48px rgba(200, 169, 110, 0.2),
+        0 4px 12px rgba(0,0,0,0.3);
+    background: rgba(40, 28, 16, 0.7);
+}
+
+.perk-card-3d:active {
+    transform: perspective(1200px) rotateY(0deg) translateY(-2px) translateZ(8px);
+    box-shadow: 0 4px 16px rgba(200, 169, 110, 0.15);
+}
+
+.perk-card-3d .card-icon {
+    font-size: 2.4em;
+    line-height: 1;
+    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5));
+}
+
+.perk-card-3d .card-name {
+    font-size: 0.9em;
+    font-weight: 700;
+    color: #FFD700;
+    letter-spacing: 0.5px;
+    margin-top: 2px;
+}
+
+/* ========== 滚动条 ========== */
+#unitContainer::-webkit-scrollbar,
+.modal-content::-webkit-scrollbar {
+    width: 4px;
+}
+
+#unitContainer::-webkit-scrollbar-track,
+.modal-content::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+#unitContainer::-webkit-scrollbar-thumb,
+.modal-content::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 2px;
+}
+
+/* ========== 响应式 ========== */
+@media (max-width: 600px) {
+    .home-title {
+        font-size: 2.2em;
+    }
+    .home-subtitle {
+        font-size: 0.9em;
+        letter-spacing: 4px;
+    }
+    .home-btn {
+        width: 220px;
+        padding: 14px 24px;
+        font-size: 1em;
+    }
+    .level-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+    }
+    .modal-content {
+        width: 95%;
+    }
+    #expBarContainer {
+        width: 200px;
+    }
+}
+
+/* ========== 技能图标（Z加速） ========== */
+.skill-icon {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    width: 56px;
+    height: 56px;
+    border-radius: 12px;
+    background: rgba(0, 0, 0, 0.7);
+    border: 2px solid rgba(255, 255, 255, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 200;
+    cursor: default;
+    transition: all 0.3s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.skill-icon.ready {
+    border-color: rgba(0, 255, 255, 0.7);
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.3), inset 0 0 15px rgba(0, 255, 255, 0.1);
+    animation: skillPulse 1.5s ease-in-out infinite;
+}
+
+.skill-icon.active {
+    border-color: rgba(255, 215, 0, 0.8);
+    box-shadow: 0 0 25px rgba(255, 215, 0, 0.4), inset 0 0 20px rgba(255, 215, 0, 0.15);
+}
+
+.skill-icon.on-cooldown {
+    border-color: rgba(255, 255, 255, 0.1);
+    box-shadow: none;
+    animation: none;
+}
+
+.skill-icon-inner {
+    font-size: 24px;
+    font-weight: 800;
+    color: rgba(80, 50, 50, 0.8);
+    text-shadow: none;
+    z-index: 1;
+    transition: color 0.15s ease, text-shadow 0.15s ease;
+}
+
+.skill-icon.ready .skill-icon-inner {
+    color: #00FFFF;
+    text-shadow: 0 0 12px rgba(0, 255, 255, 0.6);
+}
+
+.skill-icon.active .skill-icon-inner {
+    color: #FFD700;
+    text-shadow: 0 0 12px rgba(255, 215, 0, 0.6);
+}
+
+@keyframes skillPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.08); }
+}
+
+.skill-cooldown-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 0%;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(2px);
+    transition: height 0.1s linear;
+    z-index: 0;
+}
+
+
+.unit-btn-wrapper {
+    margin-bottom: 3px;
+}
+
+.unit-btn {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    padding: 4px 6px;
+    border: 1px solid #3a3228;
+    border-radius: 2px;
+    background: linear-gradient(135deg, #1e1814 0%, #14100c 100%);
+    color: #C0B8A8;
+    font-size: 0.72em;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    text-align: left;
+    gap: 6px;
+    min-height: 36px;
+}
+
+.unit-btn:hover:not(:disabled) {
+    background: linear-gradient(135deg, #2a221c 0%, #1a1410 100%);
+    border-color: #8B7355;
+    box-shadow: 0 0 8px rgba(200, 169, 110, 0.15);
+}
+
+.unit-btn:active:not(:disabled) {
+    background: linear-gradient(135deg, #14100c 0%, #0f0b08 100%);
+    border-color: #6B5335;
+}
+
+.unit-btn:disabled {
+    opacity: 0.45;
+    cursor: default;
+    border-color: #2a2218;
+    background: linear-gradient(135deg, #14100c 0%, #0f0b08 100%);
+    filter: grayscale(0.6);
+}
+
+/* 图标占位 */
+.unit-btn-icon {
+    width: 32px;
+    height: 32px;
+    flex-shrink: 0;
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 2px;
+    background: rgba(255,255,255,0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1em;
+    position: relative;
+    overflow: hidden;
+}
+
+/* 各兵种图标颜色 - 统一白色半透明 */
+.unit-btn-icon[data-type="farmer"],
+.unit-btn-icon[data-type="infantry"],
+.unit-btn-icon[data-type="archer"],
+.unit-btn-icon[data-type="knight"],
+.unit-btn-icon[data-type="mage"],
+.unit-btn-icon[data-type="swordsman"],
+.unit-btn-icon[data-type="sniper"],
+.unit-btn-icon[data-type="gunner"],
+.unit-btn-icon[data-type="paladin"] {
+    background: rgba(255,255,255,0.15);
+    border-color: rgba(255,255,255,0.3);
+}
+
+/* 统一两侧面板标题样式 */
+.unit-buttons h3,
+.ui-section h3 {
+    font-size: 0.78em;
+    color: rgba(255, 255, 255, 0.7);
+    margin: 2px 0 6px 0;
+    padding: 4px 0;
+    text-align: center;
+    letter-spacing: 2px;
+    font-weight: 400;
+    text-transform: uppercase;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.unit-btn-icon .icon-text {
+    font-size: 1.2em;
+    font-weight: 700;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+    color: rgba(255,255,255,0.85);
+}
+
+.unit-btn-info {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.unit-btn-name {
+    font-weight: 500;
+    font-size: 0.9em;
+    color: #E0D5C0;
+    display: block;
+    line-height: 1.2;
+    margin-bottom: 1px;
+}
+
+.unit-btn-status {
+    font-size: 0.8em;
+    color: #C8A96E;
+    display: block;
+}
+
+/* War3风格金色购买按钮 */
+.unit-btn-buy {
+    border-color: #4a3a28;
+}
+
+.unit-btn-buy .unit-btn-name {
+    color: #F0E0C0;
+}
+
+.unit-btn-buy:hover:not(:disabled) {
+    border-color: #C8A96E;
+    background: linear-gradient(135deg, #2a2218 0%, #1a1410 100%);
+}
+
+.unit-btn-buy:hover:not(:disabled) .unit-btn-name {
+    color: #FFE8C0;
+}
+
+/* 金币不足状态 */
+.unit-btn-buy:disabled .unit-btn-status {
+    color: #6a5a4a !important;
+}
+
+.unit-btn-buy:disabled .unit-btn-name {
+    color: #6a5a4a !important;
+}
+
+/* 已满级/已拥有 */
+.unit-btn-bought {
+    border-color: #2a3a2a !important;
+}
+
+.unit-btn-bought .unit-btn-name {
+    color: #6a8a6a !important;
+}
+
+.unit-btn-bought .unit-btn-status {
+    color: #4a6a4a !important;
+}
+
+/* 左侧兵种升级面板 - 覆盖在护卫面板上方 */
+.unit-upgrade-panel {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    background: linear-gradient(180deg, #1a1410 0%, #0f0b08 100%);
+    border: 2px solid #8B7355;
+    border-radius: 4px;
+    padding: 8px;
+    width: 155px;
+    z-index: 110;
+    box-shadow: inset 0 0 20px rgba(0,0,0,0.6), 0 4px 20px rgba(0,0,0,0.8);
+}
+
+.unit-upgrade-panel::before {
+    content: '';
+    display: block;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #C8A96E, #F0D9A0, #C8A96E, transparent);
+    margin: -8px -8px 4px -8px;
+}
+
+
+.ui-section {
+    margin-bottom: 6px;
+}
+
+.btn-group {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.btn-group button {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 4px 6px;
+    border: 1px solid #3a3228;
+    border-radius: 2px;
+    background: linear-gradient(135deg, #1e1814 0%, #14100c 100%);
+    color: #C0B8A8;
+    font-size: 0.72em;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    text-align: left;
+    gap: 6px;
+    min-height: 36px;
+}
+
+.btn-group button:hover:not(:disabled) {
+    background: linear-gradient(135deg, #2a221c 0%, #1a1410 100%);
+    border-color: #8B7355;
+    box-shadow: 0 0 8px rgba(200, 169, 110, 0.15);
+    color: #E0D5C0;
+}
+
+.btn-group button:active:not(:disabled) {
+    background: linear-gradient(135deg, #14100c 0%, #0f0b08 100%);
+    border-color: #6B5335;
+}
+
+.btn-group button:disabled {
+    opacity: 0.45;
+    cursor: default;
+    border-color: #2a2218;
+    background: linear-gradient(135deg, #14100c 0%, #0f0b08 100%);
+    filter: grayscale(0.8);
+}
+
+.btn-group button:disabled .asset-btn-name {
+    color: #6a5a4a !important;
+}
+
+.btn-group button:disabled .asset-btn-cost {
+    color: #5a4a3a !important;
+}
+
+/* 建筑图标占位 */
+.btn-group .asset-icon {
+    width: 32px;
+    height: 32px;
+    flex-shrink: 0;
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 2px;
+    background: rgba(255,255,255,0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1em;
+    overflow: hidden;
+    position: relative;
+}
+
+.btn-group .asset-icon .icon-text {
+    font-size: 1.2em;
+    font-weight: 700;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+}
+
+.btn-group .asset-btn-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.btn-group .asset-btn-name {
+    font-weight: 500;
+    font-size: 0.9em;
+    color: #E0D5C0;
+    display: block;
+    line-height: 1.2;
+    margin-bottom: 1px;
+}
+
+.btn-group .asset-btn-cost {
+    font-size: 0.8em;
+    color: #C8A96E;
+    display: block;
+    font-weight: 400;
+}
+
+/* 可购买状态的边框高亮 */
+.btn-group button:not(:disabled) {
+    border-color: #4a3a28;
+}
+
+.btn-group button:not(:disabled) .asset-btn-name {
+    color: #F0E0C0;
+}
+
+/* 升级面板 - 默认右侧（防御塔/陷阱） */
+.upgrade-panel {
+    position: fixed;
+    top: 10px;
+    right: 178px;
+    left: auto;
+    background: linear-gradient(180deg, #1a1410 0%, #0f0b08 100%);
+    border: 2px solid #8B7355;
+    border-radius: 4px;
+    padding: 8px;
+    width: 140px;
+    z-index: 100;
+    box-shadow: inset 0 0 20px rgba(0,0,0,0.6), 0 4px 20px rgba(0,0,0,0.8);
+}
+
+/* 升级面板 - 左侧（军团营地） */
+.upgrade-panel-left {
+    left: 178px;
+    right: auto;
+}
+
+.upgrade-panel::before {
+    content: '';
+    display: block;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #C8A96E, #F0D9A0, #C8A96E, transparent);
+    margin: -8px -8px 4px -8px;
+}
+
+.upgrade-header h3 {
+    color: #F0D9A0;
+    font-size: 0.82em;
+    font-weight: 400;
+    letter-spacing: 1px;
+    margin: 0;
+}
+
+.upgrade-body {
+    padding: 4px 0;
+}
+
+.upgrade-body p {
+    color: #C0B8A8;
+    font-size: 0.72em;
+}
+
+.upgrade-stats {
+    gap: 2px;
+}
+
+.upgrade-stats .stat-row {
+    padding: 2px 0;
+}
+
+.stat-name {
+    color: #8a7a6a;
+    font-size: 0.7em;
+}
+
+.stat-value {
+    color: #E0D5C0;
+    font-size: 0.7em;
+    font-weight: 500;
+}
+
+.upgrade-btn {
+    background: linear-gradient(135deg, #4a3a28, #2a2218);
+    border: 1px solid #8B7355;
+    color: #F0D9A0;
+    padding: 5px 8px;
+    font-size: 0.74em;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: all 0.2s;
+    width: 100%;
+    margin-top: 4px;
+}
+
+.upgrade-btn:hover:not(:disabled) {
+    background: linear-gradient(135deg, #5a4a38, #3a2a18);
+    border-color: #C8A96E;
+    box-shadow: 0 0 10px rgba(200,169,110,0.2);
+}
+
+.upgrade-btn:disabled {
+    opacity: 0.4;
+    cursor: default;
+}
+
+.sell-btn {
+    background: linear-gradient(135deg, #3a2018, #2a1410);
+    border: 1px solid #6a3a2a;
+    color: #C08060;
+    padding: 5px 8px;
+    font-size: 0.74em;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: all 0.2s;
+    width: 100%;
+    margin-top: 4px;
+}
+
+.sell-btn:hover {
+    background: linear-gradient(135deg, #4a2a18, #3a1a10);
+    border-color: #8a4a3a;
+}
+
+.asset-preview-panel::before {
+    content: '';
+    display: block;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #C8A96E, #F0D9A0, #C8A96E, transparent);
+    margin: -8px -8px 4px -8px;
+}
+
+.close-btn {
+    color: #8a7a6a;
+    font-size: 1.2em;
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.close-btn:hover {
+    color: #F0D9A0;
+}
+
+/* 滚动条War3风格 */
+#unitContainer::-webkit-scrollbar,
+#uiContainer::-webkit-scrollbar {
+    width: 4px;
+}
+
+#unitContainer::-webkit-scrollbar-track,
+#uiContainer::-webkit-scrollbar-track {
+    background: #0f0b08;
+}
+
+#unitContainer::-webkit-scrollbar-thumb,
+#uiContainer::-webkit-scrollbar-thumb {
+    background: #3a3228;
+    border-radius: 2px;
+}
+
+#unitContainer::-webkit-scrollbar-thumb:hover,
+#uiContainer::-webkit-scrollbar-thumb:hover {
+    background: #5a4a38;
+}
