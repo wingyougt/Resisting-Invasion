@@ -211,7 +211,7 @@ function initHomePage() {
         modalBg.onload = function() {
             for (const mc of modalContents) {
                 mc.style.backgroundImage = 'url("' + modalBg.src + '")';
-                mc.style.backgroundSize = '200%';
+                mc.style.backgroundSize = 'cover';
                 mc.style.backgroundPosition = 'center';
                 mc.style.backgroundRepeat = 'no-repeat';
             }

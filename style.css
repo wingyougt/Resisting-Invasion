@@ -542,6 +542,20 @@ body {
     text-shadow: 1px 1px 0 #000;
 }
 
+/* 排行榜弹窗内容自适应高度 - 允许弹窗随内容增长 */
+#leaderboardModal .modal-content {
+    max-height: none;
+    height: auto;
+}
+#leaderboardModal .modal-body {
+    max-height: 70vh;
+    overflow-y: auto;
+}
+
+#leaderboardContent {
+    min-height: 60px;
+}
+
 .clear-btn {
     width: 100%;
     padding: 8px;
