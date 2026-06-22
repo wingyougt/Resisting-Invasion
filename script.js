@@ -682,7 +682,7 @@ function renderLeaderboard() {
                     const realPlayers = players.filter(p => {
                         const name = p.realName || p.username || '';
                         if (!name) return false;
-                        if (name === '张三' || name === '李四' || name === '王五') return false;
+                        if (name === '张三' || name === '李四' || name === '王五' || name === '赵六' || name === '陈七') return false;
                         return p.value > 0;
                     });
                     if (realPlayers.length > 0) {
