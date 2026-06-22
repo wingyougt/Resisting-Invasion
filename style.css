@@ -62,7 +62,9 @@ body {
 
 .home-subtitle {
     font-size: 1em;
-    color: #000;
+    color: #F0D9A0;
+    -webkit-text-fill-color: #F0D9A0;
+    text-shadow: 2px 2px 0 #000;
     margin-bottom: 40px;
     letter-spacing: 6px;
     text-transform: uppercase;
