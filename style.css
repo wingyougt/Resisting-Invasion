@@ -546,6 +546,7 @@ body {
 #leaderboardModal .modal-content {
     max-height: none;
     height: auto;
+    background-size: cover !important;
 }
 #leaderboardModal .modal-body {
     max-height: 70vh;
