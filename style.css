@@ -542,11 +542,21 @@ body {
     text-shadow: 1px 1px 0 #000;
 }
 
-/* 排行榜弹窗内容自适应高度 - 允许弹窗随内容增长 */
+/* 排行榜弹窗 - 白色背景，文字更清晰 */
 #leaderboardModal .modal-content {
     max-height: none;
     height: auto;
-    background-size: cover !important;
+    background: #fff !important;
+    background-image: none !important;
+}
+#leaderboardModal .modal-header h2 {
+    color: #000;
+}
+#leaderboardModal .modal-header {
+    border-bottom-color: rgba(0,0,0,0.1);
+}
+#leaderboardModal .close-btn {
+    color: #000;
 }
 #leaderboardModal .modal-body {
     max-height: 70vh;

@@ -8246,7 +8246,7 @@ let player = { x:400, y:380, width:20, height:20, color:'blue', speed:100, bulle
             const enemy = enemies[i];
             if (!enemy.alive && !enemy.dying) continue;
             if (enemy.isBoss) { ctx.shadowColor = enemy.color; ctx.shadowBlur = 20; }
-            const enemyFrameSize = 60;
+            const enemyFrameSize = enemy.type === ENEMY_TYPES.FAST ? 54 : 60;
             let enemyFrameImg = null;
 
             // 死亡动画优先渲染
