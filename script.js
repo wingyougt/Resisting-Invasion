@@ -15,6 +15,20 @@ let gameState = {
 let gameRunning = false;
 let gamePaused = false;
 
+// ====== H5GameData 数据存储 ======
+let gameData = null;
+async function initH5GameData() {
+    try {
+        gameData = new H5GameData();
+        await gameData.init();
+        console.log('✅ H5GameData 已初始化');
+    } catch (e) {
+        console.warn('⚠️ H5GameData 初始化失败（本地环境或未登录）:', e.message);
+    }
+}
+// 存储槽位：1001=最高波次, 1002=玩家等级, 1003=金币
+const H5_DATA_SLOTS = { HIGH_WAVE: 1001, PLAYER_LEVEL: 1002, GOLD: 1003 };
+
 // ====== 升级音效 ======
 let upgradeAudio = null;
 function initUpgradeAudio() {
@@ -100,7 +114,9 @@ function safeText(id, value) {
 }
 
 // ---------- 初始化 ----------
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+    // 初始化 H5GameData 数据存储
+    await initH5GameData();
     // 🔄 重置关卡进度到初始状态 —— 只有第1关解锁，从第1关开始
     resetToFreshStart();
     initHomePage();
@@ -214,6 +230,20 @@ function initHomePage() {
             loadingContent.style.backgroundRepeat = 'no-repeat';
         };
         loadBg.src = 'assets/button/加载进度/huaban-6046129199.webp';
+    }
+
+    // 显示玩家信息
+    if (gameData) {
+        gameData.getCurrentUser().then(player => {
+            if (player) {
+                const infoDiv = document.getElementById('playerInfo');
+                const nameEl = document.getElementById('playerName');
+                const avatarEl = document.getElementById('playerAvatar');
+                if (infoDiv) infoDiv.style.display = 'flex';
+                if (nameEl) nameEl.textContent = player.realName || player.username || '';
+                if (avatarEl && player.avatar) avatarEl.src = player.avatar;
+            }
+        }).catch(() => {});
     }
 }
 
@@ -641,20 +671,60 @@ function addLeaderboardRecord(level, wave) {
 function renderLeaderboard() {
     const container = document.getElementById('leaderboardContent');
     if (!container) return;
-    const records = getLeaderboard();
-    if (records.length === 0) {
-        container.innerHTML = '<div class="empty-leaderboard">暂无记录，快去挑战吧！</div>';
-        return;
+    container.innerHTML = '<div class="empty-leaderboard">加载中...</div>';
+
+    async function doRender() {
+        if (gameData) {
+            try {
+                const players = await gameData.getRanking(H5_DATA_SLOTS.HIGH_WAVE, 20);
+                if (players && players.length > 0) {
+                    let html = '';
+                    players.forEach((p, index) => {
+                        let rank = index + 1;
+                        if (index === 0) rank = '🥇';
+                        else if (index === 1) rank = '🥈';
+                        else if (index === 2) rank = '🥉';
+                        const waveScore = p.value || 0;
+                        const level = Math.floor(waveScore / 100);
+                        const wave = waveScore % 100;
+                        const playerName = p.realName || p.username || '未知玩家';
+                        const avatarHtml = p.avatar ? `<img src="${p.avatar}" class="leaderboard-avatar" onerror="this.style.display='none'">` : '';
+                        const extraData = p.allData || {};
+                        html += `<div class="leaderboard-item cloud-item">
+                            <div class="leaderboard-rank">${rank}</div>
+                            ${avatarHtml}
+                            <div class="leaderboard-info">
+                                <div class="leaderboard-name">${playerName}</div>
+                                <div class="leaderboard-level">关卡 ${level}</div>
+                                <div class="leaderboard-wave">存活波次: ${wave}</div>
+                                <div class="leaderboard-extras">Lv.${extraData[H5_DATA_SLOTS.PLAYER_LEVEL] || 1} | 💰 ${(extraData[H5_DATA_SLOTS.GOLD] || 0).toLocaleString()}</div>
+                            </div>
+                        </div>`;
+                    });
+                    container.innerHTML = html;
+                    return;
+                }
+            } catch(e) {
+                console.warn('云端排行榜加载失败，使用本地数据', e);
+            }
+        }
+        // 降级：使用本地排行榜
+        const records = getLeaderboard();
+        if (records.length === 0) {
+            container.innerHTML = '<div class="empty-leaderboard">暂无记录，快去挑战吧！</div>';
+            return;
+        }
+        let html = '';
+        records.slice(0, 20).forEach((record, index) => {
+            let rank = index + 1;
+            if (index === 0) rank = '🥇';
+            else if (index === 1) rank = '🥈';
+            else if (index === 2) rank = '🥉';
+            html += `<div class="leaderboard-item"><div class="leaderboard-rank">${rank}</div><div class="leaderboard-info"><div class="leaderboard-level">关卡 ${record.level}</div><div class="leaderboard-wave">存活波次: ${record.wave}</div></div><div class="leaderboard-time">${record.time}</div></div>`;
+        });
+        container.innerHTML = html;
     }
-    let html = '';
-    records.slice(0, 20).forEach((record, index) => {
-        let rank = index + 1;
-        if (index === 0) rank = '🥇';
-        else if (index === 1) rank = '🥈';
-        else if (index === 2) rank = '🥉';
-        html += `<div class="leaderboard-item"><div class="leaderboard-rank">${rank}</div><div class="leaderboard-info"><div class="leaderboard-level">关卡 ${record.level}</div><div class="leaderboard-wave">存活波次: ${record.wave}</div></div><div class="leaderboard-time">${record.time}</div></div>`;
-    });
-    container.innerHTML = html;
+    doRender();
 }
 
 function clearLeaderboard() {
@@ -683,6 +753,16 @@ function showGameResult(level, wave) {
         }
     }
     saveLevelProgress(progress);
+
+    // 保存数据到 H5GameData 云端
+    if (gameData) {
+        const waveScore = level * 100 + wave;
+        gameData.setValues({
+            [H5_DATA_SLOTS.HIGH_WAVE]: waveScore,
+            [H5_DATA_SLOTS.PLAYER_LEVEL]: typeof playerLevel !== 'undefined' ? playerLevel : 1,
+            [H5_DATA_SLOTS.GOLD]: typeof playerGold !== 'undefined' ? Math.floor(playerGold) : 0
+        }).catch(() => {});
+    }
 
     const resultBtns = document.querySelector('#resultModal .result-btns');
     const closeBtn = document.querySelector('#resultModal .close-btn');

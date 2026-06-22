@@ -5,13 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>塔防肉鸽 - Resisting Invasion</title>
     <link rel="stylesheet" href="style.css">
-</head>
+    <script src="https://ai-game-center.habby.cn/sdk/v1.0.0/H5GameData.js"></script></head>
 <body>
     <!-- 首页界面 -->
     <div id="homeScreen" class="screen">
         <div class="home-content">
             <h1 class="home-title">Resisting Invasion</h1>
             <p class="home-subtitle">塔防 · 肉鸽 · 策略</p>
+            <div id="playerInfo" class="player-info" style="display:none;">
+                <img id="playerAvatar" src="" class="player-avatar" width="32" height="32">
+                <span id="playerName" class="player-name"></span>
+            </div>
             <div class="home-btns">
                 <button id="startGameBtn" class="home-btn primary-btn" onclick="showLevelSelect()">开始游戏</button>
                 <button class="home-btn" onclick="showLeaderboard()">排行榜</button>
