@@ -872,7 +872,7 @@ function showGameResult(level, wave) {
 // ================== 开始游戏背景音乐（全局） ==================
 const bgmSound = new Audio();
 bgmSound.loop = true;
-bgmSound.volume = 0.2;
+bgmSound.volume = 0.35;
 let bgmStarted = false;
 let bgmLoading = false;
 let bgmReady = false;
@@ -1098,7 +1098,7 @@ function initGame() {
         const difficultyMultiplier = levelMultiplier * waveMultiplier;
         const attackLevelMult = 1.0;
         const scaledEnemyCount = 100;
-        const baseDelay = 2.0;
+        const baseDelay = 1.0;
         const enemyQueue = [];
         let totalDelay = 0;
 
@@ -1330,7 +1330,13 @@ function initGame() {
     };
     let camps = [];
     let campCount = 0;
-    const CAMPS_CAPACITY = 3;
+    const CAMPS_CAPACITY = 9;
+    function getCampCapacityByLevel(level) {
+        return level >= 10 ? 9 : (level >= 5 ? 6 : 3);
+    }
+    function getSameTypeLimitByLevel(level) {
+        return level >= 10 ? 5 : (level >= 5 ? 3 : 2);
+    }
     // 营地标记模式（点击营地后，再点击地图设置标记位置）
     let settingCampMarker = false;
     let campBeingMarked = null;
@@ -3611,7 +3617,7 @@ let player = { x:400, y:380, width:20, height:20, color:'blue', speed:100, bulle
             for (let ci = 0; ci < campCount; ci++) {
                 if (camps[ci] && camps[ci].unitType === key) campCountOfType++;
             }
-            const maxAllowed = playerLevel >= 10 ? 3 : (playerLevel >= 5 ? 2 : 1);
+            const maxAllowed = getSameTypeLimitByLevel(playerLevel);
             const canPlaceMore = campCountOfType < maxAllowed;
             
             const wrapper = document.createElement('div');
@@ -4274,8 +4280,9 @@ let player = { x:400, y:380, width:20, height:20, color:'blue', speed:100, bulle
             // 营地放置
             if (selectedAsset._isCamp) {
                 let placed = false;
-                if (campCount >= CAMPS_CAPACITY) {
-                    addDamageText(mouseX, mouseY-20, '提高角色等级可增加上限！', 'red', 1.5, 30);
+                const maxCapacity = getCampCapacityByLevel(playerLevel);
+                if (campCount >= maxCapacity) {
+                    addDamageText(mouseX, mouseY-20, `已达总上限！当前Lv.${playerLevel}最多${maxCapacity}个`, 'red', 1.5, 30);
                 } else if (!canPlaceCampOnGrid(grid.col, grid.row)) {
                     addDamageText(mouseX, mouseY-20, '❌ 此处不可放置（建筑重叠）！', 'red', 1.5, 30);
                 } else {
@@ -4284,7 +4291,7 @@ let player = { x:400, y:380, width:20, height:20, color:'blue', speed:100, bulle
                     for (let ci = 0; ci < campCount; ci++) {
                         if (camps[ci] && camps[ci].unitType === selectedAsset._unitType) typeCount++;
                     }
-                    const maxAllowed = playerLevel >= 10 ? 3 : (playerLevel >= 5 ? 2 : 1);
+                    const maxAllowed = getSameTypeLimitByLevel(playerLevel);
                     if (typeCount >= maxAllowed) {
                         addDamageText(mouseX, mouseY-20, `已达上限！最多${maxAllowed}个`, '#FFD700', 1.5, 30);
                     } else if (playerGold >= selectedAsset.cost) {
