@@ -676,33 +676,42 @@ function renderLeaderboard() {
     async function doRender() {
         if (gameData) {
             try {
-                const players = await gameData.getRanking(H5_DATA_SLOTS.HIGH_WAVE, 20);
+                const players = await gameData.getRanking(H5_DATA_SLOTS.HIGH_WAVE, 50);
                 if (players && players.length > 0) {
-                    let html = '';
-                    players.forEach((p, index) => {
-                        let rank = index + 1;
-                        if (index === 0) rank = '🥇';
-                        else if (index === 1) rank = '🥈';
-                        else if (index === 2) rank = '🥉';
-                        const waveScore = p.value || 0;
-                        const level = Math.floor(waveScore / 100);
-                        const wave = waveScore % 100;
-                        const playerName = p.realName || p.username || '未知玩家';
-                        const avatarHtml = p.avatar ? `<img src="${p.avatar}" class="leaderboard-avatar" onerror="this.style.display='none'">` : '';
-                        const extraData = p.allData || {};
-                        html += `<div class="leaderboard-item cloud-item">
-                            <div class="leaderboard-rank">${rank}</div>
-                            ${avatarHtml}
-                            <div class="leaderboard-info">
-                                <div class="leaderboard-name">${playerName}</div>
-                                <div class="leaderboard-level">关卡 ${level}</div>
-                                <div class="leaderboard-wave">存活波次: ${wave}</div>
-                                <div class="leaderboard-extras">Lv.${extraData[H5_DATA_SLOTS.PLAYER_LEVEL] || 1} | 💰 ${(extraData[H5_DATA_SLOTS.GOLD] || 0).toLocaleString()}</div>
-                            </div>
-                        </div>`;
+                    // 过滤掉模拟数据（只保留有效分数且有用户名的真实记录）
+                    const realPlayers = players.filter(p => {
+                        const name = p.realName || p.username || '';
+                        if (!name) return false;
+                        if (name === '张三' || name === '李四' || name === '王五') return false;
+                        return p.value > 0;
                     });
-                    container.innerHTML = html;
-                    return;
+                    if (realPlayers.length > 0) {
+                        let html = '';
+                        realPlayers.slice(0, 20).forEach((p, index) => {
+                            let rank = index + 1;
+                            if (index === 0) rank = '🥇';
+                            else if (index === 1) rank = '🥈';
+                            else if (index === 2) rank = '🥉';
+                            const waveScore = p.value || 0;
+                            const level = Math.floor(waveScore / 100);
+                            const wave = waveScore % 100;
+                            const playerName = p.realName || p.username || '未知玩家';
+                            const avatarHtml = p.avatar ? `<img src="${p.avatar}" class="leaderboard-avatar" onerror="this.style.display='none'">` : '';
+                            const extraData = p.allData || {};
+                            html += `<div class="leaderboard-item cloud-item">
+                                <div class="leaderboard-rank">${rank}</div>
+                                ${avatarHtml}
+                                <div class="leaderboard-info">
+                                    <div class="leaderboard-name">${playerName}</div>
+                                    <div class="leaderboard-level">关卡 ${level}</div>
+                                    <div class="leaderboard-wave">存活波次: ${wave}</div>
+                                    <div class="leaderboard-extras">Lv.${extraData[H5_DATA_SLOTS.PLAYER_LEVEL] || 1} | 💰 ${(extraData[H5_DATA_SLOTS.GOLD] || 0).toLocaleString()}</div>
+                                </div>
+                            </div>`;
+                        });
+                        container.innerHTML = html;
+                        return;
+                    }
                 }
             } catch(e) {
                 console.warn('云端排行榜加载失败，使用本地数据', e);
