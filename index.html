@@ -89,7 +89,7 @@
             </div>
             <div class="modal-body" style="text-align:center;padding:16px 16px 20px;">
                 <p id="war3AlertMessage" style="color:#000;font-size:0.95em;line-height:1.6;margin:0 0 16px;white-space:pre-line;"></p>
-                <button id="war3AlertBtn" class="war3-btn" onclick="closeModal('war3AlertModal')">确定</button>
+                <button id="war3AlertBtn" class="war3-btn" onclick="playUiClickSound();closeModal('war3AlertModal')">确定</button>
             </div>
         </div>
     </div>
@@ -105,7 +105,7 @@
                 <input id="war3PromptInput" type="number" min="1" max="3" style="width:100px;padding:6px 10px;text-align:center;font-size:1.1em;background:#1a1410;border:2px solid #6a5a3a;border-radius:3px;color:#F0D9A0;outline:none;margin-bottom:14px;">
                 <div style="display:flex;gap:10px;justify-content:center;">
                     <button class="war3-btn" onclick="confirmWar3Prompt()">确定</button>
-                    <button class="war3-btn war3-btn-cancel" onclick="closeModal('war3PromptModal')">取消</button>
+                    <button class="war3-btn war3-btn-cancel" onclick="playUiClickSound();closeModal('war3PromptModal')">取消</button>
                 </div>
             </div>
         </div>
@@ -298,6 +298,6 @@
         <div class="skill-icon-inner">Z冲</div>
     </div>
 
-    <script src="script.js"></script>
+    <script src="script.js?v=2"></script>
 </body>
 </html>

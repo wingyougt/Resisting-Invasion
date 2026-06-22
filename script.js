@@ -1,4 +1,4 @@
-﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿// ================== 首页与弹窗系统 ==================
+﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿// ================== 首页与弹窗系统 ==================
 
 // ---------- 游戏全局状态 ----------
 let gameState = {
@@ -338,6 +338,7 @@ function showWar3Prompt(title, message, defaultValue, callback) {
 }
 
 function confirmWar3Prompt() {
+    playUiClickSound();
     const input = document.getElementById('war3PromptInput');
     const val = input.value;
     closeModal('war3PromptModal');
@@ -462,6 +463,7 @@ function resetToFreshStart() {
 
 // ================== 进度修复工具 ==================
 function repairProgress() {
+    playUiClickSound();
     const progress = getLevelProgress();
     let changed = false;
     
@@ -504,6 +506,7 @@ function repairProgress() {
 }
 
 function fixProgressManually() {
+    playUiClickSound();
     const progress = getLevelProgress();
     const currentUnlocked = progress.unlockedLevels;
     showWar3Prompt(
